@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cps-hello-container
+  namespace: cps-hello-container
+  labels:
+    app: cps-hello-container
+spec:
+  selector:
+    matchLabels:
+        app: cps-hello-container
+  replicas: #{Replicas}
+  template:
+    metadata:
+      labels:
+        app: cps-hello-container
+    spec:
+      containers:
+      - name: cps-hello-container
+        image: #{Registry}/#{Image}
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true   # Run container as non-root user
+          capabilities:
+            drop:
+              - ALL   # Drop all capabilities to reduce privileges
+          readOnlyRootFilesystem: true   # Mount root file system as read-only
+        env:
+        - name: "AllowedHosts"
+          value: "*"
+        - name: "Logging__LogLevel__Default"
+          value: "Information"
+        - name: "Logging__LogLevel__Microsoft"
+          value: "Warning"
+        - name: "Logging__LogLevel__Microsoft.Hosting.Lifetime"
+          value: "Information"
+        ports:
+        - containerPort: 80
+        - containerPort: 443
