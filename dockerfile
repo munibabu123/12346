@@ -8,7 +8,7 @@ RUN dotnet publish ./Service/DPS.Service.csproj -c Release -o ../out
 
 
 
-FROM microsoft/dotnet:2.2-aspnetcore-runtime
+FROM microsoft/dotnet:3.0.0-preview2-runtime-deps-bionic
 
 WORKDIR /app
 COPY --from=build-env /app/out .
