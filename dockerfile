@@ -1,14 +1,14 @@
-FROM microsoft/dotnet:2.2-sdk AS build-env
+FROM microsoft/dotnet:6.0-sdk AS build-env
 
 WORKDIR /app
 COPY . ./
 
 RUN ls
-RUN dotnet publish ./Service/DPS.Service.csproj -c Release -o ../out
+RUN dotnet publish ./Service/DPS.Service.csproj -c Release -o ./out
 
 
 
-FROM microsoft/dotnet:3.0.0-preview2-runtime-deps-bionic
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 
 WORKDIR /app
 COPY --from=build-env /app/out .
